@@ -1,5 +1,5 @@
 #let meta = (
-  title: "中文blog",
+  title: "我的first中文blog",
   date: "2026-04-28",
 )
 
