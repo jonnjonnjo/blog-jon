@@ -1,0 +1,30 @@
+---
+interface Post {
+  title: string;
+  date: string;
+  pdf: string;
+}
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+  posts.length === 0 ? (
+    <p class="empty">no posts yet.</p>
+  ) : (
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <a href={post.pdf} target="_blank" rel="noopener noreferrer">
+            {post.title}
+          </a>
+          <span class="post-date">{post.date}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}

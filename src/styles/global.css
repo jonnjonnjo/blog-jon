@@ -1,0 +1,102 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #f9f9f7;
+  --text: #1a1a1a;
+  --muted: #888;
+  --dim: #bbb;
+  --hover: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111110;
+    --text: #e8e8e4;
+    --muted: #666;
+    --dim: #444;
+    --hover: #aaa;
+  }
+}
+
+body {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  background: var(--bg);
+  color: var(--text);
+  padding: 2.5rem 2rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 1.5rem 1.25rem;
+    font-size: 11px;
+  }
+
+  .post-list li {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-date {
+    font-size: 10px;
+    color: var(--dim);
+  }
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.header h1 {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.header p {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.post-list {
+  list-style: none;
+}
+
+.post-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.post-list a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.1s ease;
+}
+
+.post-list a:hover {
+  color: var(--hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-date {
+  color: var(--dim);
+  font-size: 11px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 11px;
+}

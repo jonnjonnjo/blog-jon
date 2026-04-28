@@ -9,10 +9,12 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "typst:build": "node scripts/build-posts.mjs",
+    "dev": "npm run typst:build && astro dev",
+    "build": "npm run typst:build && astro build"
   },
   "dependencies": {
-    "astro": "^6.1.9",
-    "astro-typst": "^0.12.3"
+    "astro": "^6.1.9"
   }
 }
