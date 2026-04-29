@@ -6,13 +6,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "typst:build": "node scripts/build-posts.mjs",
-    "dev": "npm run typst:build && astro dev",
-    "build": "npm run typst:build && astro build"
+    "dev": "npm run typst:build && astro dev"
   },
   "dependencies": {
     "astro": "^6.1.9"
