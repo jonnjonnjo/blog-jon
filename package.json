@@ -10,9 +10,13 @@
     "preview": "astro preview",
     "astro": "astro",
     "typst:build": "node scripts/build-posts.mjs",
-    "dev": "npm run typst:build && astro dev"
+    "dev": "npm run typst:build && astro dev",
+    "prepare": "husky"
   },
   "dependencies": {
     "astro": "^6.1.9"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
   }
 }
