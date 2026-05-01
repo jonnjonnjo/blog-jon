@@ -20,3 +20,4 @@
 - Jetpack Compose for UI
 - LangDetect to differentiate between 中文和英语
 - Local Model (Qwen ? )
+- 4
