@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "typst:watch": "node scripts/watch-post.mjs",
     "typst:build": "node scripts/build-posts.mjs",
     "dev": "npm run typst:build && astro dev",
     "prepare": "husky"
