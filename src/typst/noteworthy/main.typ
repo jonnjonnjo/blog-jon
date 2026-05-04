@@ -6,7 +6,7 @@
   language: "EN",
   title: "中文app",
   // header-title: "Header Title", // Optional: The document title will be used instead of it if it is absent
-  // date: "15/08/1947", //Optional: Current system date will be used if this is absent
+  date: "2026-05-04", //Optional: Current system date will be used if this is absent
   author: "jon",
   // contact-details: "https://example.com", // Optional: Maybe a link to your website, or phone number
   toc-title: "Table of Contents",
