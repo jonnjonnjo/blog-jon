@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run typst:build && npm run build
+npm run typst:build
