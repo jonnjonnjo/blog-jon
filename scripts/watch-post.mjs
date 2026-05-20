@@ -1,7 +1,7 @@
 
-import { resolve, join, dirname } from "node:path";
+import { resolve, join } from "node:path";
 import { spawn } from "node:child_process";
-import { access, mkdir } from "node:fs/promises";
+import { stat, mkdir } from "node:fs/promises";
 
 const slug = process.argv[2];
 if (!slug) {
@@ -11,32 +11,44 @@ if (!slug) {
 }
 
 const root = resolve(".");
-const typFile = join(root, "src/typst/", `${slug}.typ`);
-const pdfOut = join(root, "public/pdfs/", `${slug}.pdf`);
+const typstDir = join(root, "src/typst");
+const pdfOut = join(root, "public/pdfs", `${slug}.pdf`);
 
+// Support both flat (slug.typ) and directory-based (slug/main.typ) projects
+let typFile = join(typstDir, `${slug}.typ`);
 try {
-  await access(typFile);
+  await stat(typFile);
 } catch {
-  console.error(`File not found: ${typFile}`);
-  process.exit(1);
+  const dirEntry = join(typstDir, slug, "main.typ");
+  try {
+    await stat(dirEntry);
+    typFile = dirEntry;
+  } catch {
+    console.error(`File not found: tried ${join(typstDir, slug + ".typ")} and ${dirEntry}`);
+    process.exit(1);
+  }
 }
 
 console.log(`Watching: ${typFile}`);
 console.log(`Output:   ${pdfOut}`);
 
-await mkdir(dirname(pdfOut), { recursive: true });
+await mkdir(join(root, "public/pdfs"), { recursive: true });
 const typst = spawn("typst", ["watch", typFile, pdfOut], { stdio: "inherit" });
 
-// await new Promise((res, rej) => {
-//   const start = Date.now();
-//   const check = () => {
-//     if (existsSync(pdfOut)) return res();
-//     if (Date.now() - start > 10_000) return rej(new Error("Timeout: PDF not generated after 10s"));
-//     setTimeout(check, 100);
-//   };
-//   check();
-// });
-await new Promise((res) => setTimeout(res, 1500));
+// Wait until the PDF is actually written before opening the viewer
+const start = Date.now();
+while (true) {
+  try {
+    await stat(pdfOut);
+    break;
+  } catch {}
+  if (Date.now() - start > 10_000) {
+    console.error("Timeout: PDF not generated after 10s");
+    typst.kill();
+    process.exit(1);
+  }
+  await new Promise((r) => setTimeout(r, 100));
+}
 
 const zathura = spawn("zathura", [pdfOut], { stdio: "inherit" });
 
