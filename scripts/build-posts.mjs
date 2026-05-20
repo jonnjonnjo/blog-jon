@@ -1,5 +1,5 @@
 
-import { readdir, readFile, writeFile, mkdir, stat } from "node:fs/promises";
+import { readdir, readFile, writeFile, mkdir, stat, unlink } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -71,6 +71,15 @@ const posts = await Promise.all(
     return { title, date, pdf: `/pdfs/${slug}.pdf` };
   })
 );
+
+const validPdfs = new Set(entries.map(({ slug }) => `${slug}.pdf`));
+const existingPdfs = await readdir(pdfsDir).catch(() => []);
+for (const file of existingPdfs) {
+  if (file.endsWith(".pdf") && !validPdfs.has(file)) {
+    await unlink(join(pdfsDir, file));
+    console.log(`removed orphaned ${file}`);
+  }
+}
 
 posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 await writeFile(outFile, JSON.stringify(posts, null, 2));
