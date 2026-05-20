@@ -15,6 +15,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.2.7",
     "astro": "^6.1.9"
   },
   "devDependencies": {
