@@ -1,2 +1,2 @@
 #!/bin/sh
-npm run typst:build
+npm run typst:build && git add public/pdfs/ src/data/posts.json
