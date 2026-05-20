@@ -5,6 +5,11 @@
     "pdf": "/pdfs/dummy.pdf"
   },
   {
+    "title": "dummy post",
+    "date": "2026-05-20",
+    "pdf": "/pdfs/dummy2.pdf"
+  },
+  {
     "title": "我的first中文blog",
     "date": "2026-04-28",
     "pdf": "/pdfs/test.pdf"
