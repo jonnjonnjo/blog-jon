@@ -1,7 +1,10 @@
 
 import { readdir, readFile, writeFile, mkdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { execSync } from "node:child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 const root = resolve(".");
 const typstDir = join(root, "src/typst/");
@@ -52,8 +55,18 @@ const posts = await Promise.all(
     const title = titleMatch ? titleMatch[1] : slug.replace(/[-_]/g, " ");
     const date = dateMatch ? dateMatch[1] : new Date().toISOString().split("T")[0];
 
-    console.log(`compiling ${slug}...`);
-    execSync(`typst compile ${typFile} ${pdfOut}`);
+    let needsCompile = true;
+    try {
+      const [srcStat, pdfStat] = await Promise.all([stat(typFile), stat(pdfOut)]);
+      needsCompile = srcStat.mtimeMs > pdfStat.mtimeMs;
+    } catch { /* pdf doesn't exist yet */ }
+
+    if (needsCompile) {
+      console.log(`compiling ${slug}...`);
+      await execFileAsync("typst", ["compile", typFile, pdfOut]);
+    } else {
+      console.log(`skipping ${slug} (unchanged)`);
+    }
 
     return { title, date, pdf: `/pdfs/${slug}.pdf` };
   })
