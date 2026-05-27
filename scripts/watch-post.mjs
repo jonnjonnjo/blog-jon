@@ -33,7 +33,8 @@ console.log(`Watching: ${typFile}`);
 console.log(`Output:   ${pdfOut}`);
 
 await mkdir(join(root, "public/pdfs"), { recursive: true });
-const typst = spawn("typst", ["watch", typFile, pdfOut], { stdio: "inherit" });
+const fontsDir = join(typstDir, "_fonts");
+const typst = spawn("typst", ["watch", "--font-path", fontsDir, typFile, pdfOut], { stdio: "inherit" });
 
 // Wait until the PDF is actually written before opening the viewer
 const start = Date.now();

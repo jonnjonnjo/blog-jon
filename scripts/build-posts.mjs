@@ -8,6 +8,7 @@ const execFileAsync = promisify(execFile);
 
 const root = resolve(".");
 const typstDir = join(root, "src/typst/");
+const fontsDir = join(typstDir, "_fonts");
 const pdfsDir = join(root, "public/pdfs");
 const dataDir = join(root, "src/data");
 const outFile = join(dataDir, "posts.json");
@@ -20,6 +21,9 @@ async function findEntries(dir) {
   const items = await readdir(dir);
 
   for (const item of items) {
+    // Skip underscore-prefixed files/dirs (partials, shared modules)
+    if (item.startsWith("_")) continue;
+
     const fullPath = join(dir, item);
     const info = await stat(fullPath);
 
@@ -43,7 +47,26 @@ async function findEntries(dir) {
   return entries;
 }
 
+async function findPartials(dir) {
+  const partials = [];
+  const items = await readdir(dir);
+  for (const item of items) {
+    const fullPath = join(dir, item);
+    const info = await stat(fullPath);
+    if (info.isDirectory()) {
+      partials.push(...(await findPartials(fullPath)));
+    } else if (item.startsWith("_") && item.endsWith(".typ")) {
+      partials.push(fullPath);
+    }
+  }
+  return partials;
+}
+
 const entries = await findEntries(typstDir);
+const partials = await findPartials(typstDir);
+const newestPartialMtime = partials.length
+  ? Math.max(...(await Promise.all(partials.map(async (p) => (await stat(p)).mtimeMs))))
+  : 0;
 
 const posts = await Promise.all(
   entries.map(async ({ slug, typFile }) => {
@@ -58,12 +81,13 @@ const posts = await Promise.all(
     let needsCompile = true;
     try {
       const [srcStat, pdfStat] = await Promise.all([stat(typFile), stat(pdfOut)]);
-      needsCompile = srcStat.mtimeMs > pdfStat.mtimeMs;
+      const newestSrc = Math.max(srcStat.mtimeMs, newestPartialMtime);
+      needsCompile = newestSrc > pdfStat.mtimeMs;
     } catch { /* pdf doesn't exist yet */ }
 
     if (needsCompile) {
       console.log(`compiling ${slug}...`);
-      await execFileAsync("typst", ["compile", typFile, pdfOut]);
+      await execFileAsync("typst", ["compile", "--font-path", fontsDir, typFile, pdfOut]);
     } else {
       console.log(`skipping ${slug} (unchanged)`);
     }
