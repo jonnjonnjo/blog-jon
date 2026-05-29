@@ -6,7 +6,9 @@ const posts = defineCollection({
   schema: z.object({
     title: z.string(),
     subtitle: z.string().optional(),
-    date: z.coerce.date(),
+    // Optional: auto-stamped on first commit by scripts/stamp-date.mjs.
+    // You never need to type it; editing the post later won't change it.
+    date: z.coerce.date().optional(),
     draft: z.boolean().default(false),
   }),
 });

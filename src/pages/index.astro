@@ -7,7 +7,11 @@ const posts = (
   await getCollection("posts", ({ data }) =>
     import.meta.env.PROD ? !data.draft : true
   )
-).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+).sort(
+  (a, b) =>
+    (b.data.date?.getTime() ?? Date.now()) -
+    (a.data.date?.getTime() ?? Date.now())
+);
 ---
 
 <BaseLayout>

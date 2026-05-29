@@ -16,7 +16,7 @@ const { posts } = Astro.props;
       {posts.map((post) => (
         <li>
           <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-          <span class="post-date">{post.data.date.toISOString().split("T")[0]}</span>
+          <span class="post-date">{(post.data.date ?? new Date()).toISOString().split("T")[0]}</span>
         </li>
       ))}
     </ul>
