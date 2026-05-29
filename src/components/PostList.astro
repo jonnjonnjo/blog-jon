@@ -1,12 +1,8 @@
 ---
-interface Post {
-  title: string;
-  date: string;
-  pdf: string;
-}
+import type { CollectionEntry } from "astro:content";
 
 interface Props {
-  posts: Post[];
+  posts: CollectionEntry<"posts">[];
 }
 
 const { posts } = Astro.props;
@@ -19,10 +15,8 @@ const { posts } = Astro.props;
     <ul class="post-list">
       {posts.map((post) => (
         <li>
-          <a href={post.pdf} target="_blank" rel="noopener noreferrer">
-            {post.title}
-          </a>
-          <span class="post-date">{post.date}</span>
+          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+          <span class="post-date">{post.data.date.toISOString().split("T")[0]}</span>
         </li>
       ))}
     </ul>

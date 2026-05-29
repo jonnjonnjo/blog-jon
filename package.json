@@ -9,14 +9,16 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typst:watch": "node scripts/watch-post.mjs",
-    "typst:build": "node scripts/build-posts.mjs",
-    "dev": "npm run typst:build && astro dev",
+    "dev": "astro dev",
     "prepare": "husky"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.2.7",
-    "astro": "^6.1.9"
+    "@fontsource/spectral": "^5.2.8",
+    "astro": "^6.1.9",
+    "katex": "^0.17.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "husky": "^9.1.7"

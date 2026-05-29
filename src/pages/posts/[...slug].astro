@@ -1,0 +1,36 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "@fontsource/spectral/400.css";
+import "@fontsource/spectral/400-italic.css";
+import "@fontsource/spectral/600.css";
+import "katex/dist/katex.min.css";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) =>
+    import.meta.env.PROD ? !data.draft : true
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const dateStr = post.data.date.toISOString().split("T")[0];
+---
+
+<BaseLayout title={post.data.title} description={post.data.subtitle}>
+  <article class="prose">
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      {post.data.subtitle && <p class="subtitle">{post.data.subtitle}</p>}
+      <p class="post-meta">{dateStr}</p>
+    </header>
+    <Content />
+  </article>
+  <footer class="post-footer">
+    <a href="/">← back</a>
+  </footer>
+</BaseLayout>
