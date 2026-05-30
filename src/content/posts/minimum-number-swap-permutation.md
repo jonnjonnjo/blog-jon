@@ -1,6 +1,6 @@
 ---
 title: "Minimum Number of swap for a permutation"
-date: 2026-04-28
+date: 2026-05-30
 ---
 
 
