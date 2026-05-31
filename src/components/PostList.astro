@@ -6,19 +6,49 @@ interface Props {
 }
 
 const { posts } = Astro.props;
+const monthFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
+
+const groups = posts.reduce(
+  (acc, post) => {
+    const postDate = post.data.date;
+    const key = postDate
+      ? `${postDate.getFullYear()}-${String(postDate.getMonth() + 1).padStart(2, "0")}`
+      : "undated";
+    const label = postDate ? monthFormatter.format(postDate) : "Undated";
+    const existingGroup = acc.find((group) => group.key === key);
+
+    if (existingGroup) {
+      existingGroup.posts.push(post);
+      return acc;
+    }
+
+    return [...acc, { key, label, posts: [post] }];
+  },
+  [] as { key: string; label: string; posts: CollectionEntry<"posts">[] }[]
+);
 ---
 
 {
   posts.length === 0 ? (
     <p class="empty">no posts yet.</p>
   ) : (
-    <ul class="post-list">
-      {posts.map((post) => (
-        <li>
-          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-          <span class="post-date">{(post.data.date ?? new Date()).toISOString().split("T")[0]}</span>
-        </li>
+    <div class="post-groups">
+      {groups.map((group) => (
+        <section class="month-group" aria-label={group.label}>
+          <h2 class="month-separator">{group.label}</h2>
+          <ul class="post-list">
+            {group.posts.map((post) => (
+              <li>
+                <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+                <span class="post-date">{(post.data.date ?? new Date()).toISOString().split("T")[0]}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
       ))}
-    </ul>
+    </div>
   )
 }

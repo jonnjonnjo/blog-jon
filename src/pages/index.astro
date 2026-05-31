@@ -16,9 +16,12 @@ const posts = (
 
 <BaseLayout>
   <header class="header">
-    <h1>Jonathan Arthurito Aldi Sinaga</h1>
-    <p>大家好! 这是jon's blog！</p>
-    <p><a href="https://jonarthurito.substack.com/" target="_blank" rel="noopener noreferrer">personal writing → substack</a></p>
+    <div class="header-row">
+      <h1>Jonathan Arthurito Aldi Sinaga</h1>
+      <button class="theme-toggle" type="button" aria-live="polite">theme: light</button>
+    </div>
+    <p>大家好! This blog mainly contains technical-related blog！</p>
+    <p><a href="https://jonarthurito.substack.com/" target="_blank" rel="noopener noreferrer">checkout my substack!</a></p>
   </header>
   <main>
     <PostList posts={posts} />

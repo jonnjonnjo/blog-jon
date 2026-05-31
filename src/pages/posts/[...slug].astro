@@ -24,7 +24,10 @@ const dateStr = (post.data.date ?? new Date()).toISOString().split("T")[0];
 <BaseLayout title={post.data.title} description={post.data.subtitle}>
   <article class="prose">
     <header class="post-header">
-      <h1>{post.data.title}</h1>
+      <div class="post-title-row">
+        <h1>{post.data.title}</h1>
+        <button class="theme-toggle" type="button" aria-live="polite">theme: light</button>
+      </div>
       {post.data.subtitle && <p class="subtitle">{post.data.subtitle}</p>}
       <p class="post-meta">{dateStr}</p>
     </header>

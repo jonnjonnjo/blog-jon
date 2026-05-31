@@ -10,48 +10,107 @@
   --muted: #888;
   --dim: #bbb;
   --hover: #555;
+  --surface: #ffffff;
+  --outline: #d9d9d1;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #111110;
-    --text: #e8e8e4;
-    --muted: #666;
-    --dim: #444;
-    --hover: #aaa;
-  }
+:root[data-theme="dark"] {
+  --bg: #111110;
+  --text: #e8e8e4;
+  --muted: #8a8a84;
+  --dim: #4d4d48;
+  --hover: #cbcbc5;
+  --surface: #181816;
+  --outline: #2f2f2b;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
   font-family: "IBM Plex Mono", monospace;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.8;
   background: var(--bg);
   color: var(--text);
-  padding: 2.5rem 2rem;
+  padding: 2.5rem 1.4rem;
   max-width: 680px;
   margin: 0 auto;
 }
 
 @media (max-width: 480px) {
   body {
-    padding: 1.5rem 1.25rem;
-    font-size: 11px;
+    padding: 1.25rem 1rem 2rem;
+    font-size: 12px;
   }
 
   .post-list li {
     flex-direction: column;
-    gap: 0;
+    align-items: flex-start;
+    gap: 0.05rem;
+    padding: 0.15rem 0;
   }
 
   .post-date {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--dim);
+    white-space: normal;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .header h1 {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .header p {
+    font-size: 12px;
+  }
+
+  .header-row,
+  .post-title-row {
+    align-items: flex-start;
+  }
+
+  .theme-toggle {
+    font-size: 10px;
+    margin-top: 0.15rem;
+  }
+
+  .month-separator {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    background: var(--bg);
+    padding: 0.5rem 0 0.35rem;
+  }
+
+  .prose {
+    font-size: 18px;
+    line-height: 1.75;
+  }
+
+  .post-header h1 {
+    font-size: 1.55em;
+    line-height: 1.25;
   }
 }
 
 .header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.header-row,
+.post-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.9rem;
 }
 
 .header h1 {
@@ -76,7 +135,12 @@ body {
   gap: 1rem;
 }
 
+.post-list li + li {
+  margin-top: 0.3rem;
+}
+
 .post-list a {
+  display: inline-block;
   color: var(--text);
   text-decoration: none;
   font-size: 12px;
@@ -99,6 +163,50 @@ body {
 .empty {
   color: var(--muted);
   font-size: 11px;
+}
+
+.post-groups {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.month-group {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.month-separator {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  border-top: 1px solid var(--outline);
+  padding-top: 0.5rem;
+}
+
+.theme-toggle {
+  border: 0;
+  border-bottom: 1px solid var(--outline);
+  background: transparent;
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  padding: 0;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--hover);
+  color: var(--hover);
+}
+
+.theme-toggle:active {
+  opacity: 0.72;
 }
 
 /* ── Post pages ──────────────────────────────────────────── */
@@ -191,12 +299,10 @@ body {
 }
 
 /* dark-mode code theme via Shiki dual themes */
-@media (prefers-color-scheme: dark) {
-  .prose .astro-code,
-  .prose .astro-code span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-  }
+:root[data-theme="dark"] .prose .astro-code,
+:root[data-theme="dark"] .prose .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }
 
 .prose .footnotes {
