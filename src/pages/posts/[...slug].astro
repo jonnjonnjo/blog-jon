@@ -31,6 +31,7 @@ const dateStr = (post.data.date ?? new Date()).toISOString().split("T")[0];
       {post.data.subtitle && <p class="subtitle">{post.data.subtitle}</p>}
       <p class="post-meta">{dateStr}</p>
     </header>
+
     <Content />
   </article>
   <footer class="post-footer">
